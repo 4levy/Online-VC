@@ -1,9 +1,12 @@
+// npm install discord.js-selfbot-v13 colors tweetnacl
+
 // เอาไปแจกต่อให้เครดิตด้วย | Deobf by 4levy ใครเปลี่ยนขอให้ไม่เจอดี
 
 // revere engineer
 
 const { Client, Options } = require("discord.js-selfbot-v13");
 require("colors");
+const { secretbox } = require('tweetnacl');
 
 class ModClient extends Client {
     constructor(token, config, info) {
@@ -33,6 +36,11 @@ class ModClient extends Client {
     stopAllIntervals() {
         this.intervals.forEach(clearInterval);
         this.intervals.clear();
+    }
+
+    _encrypt(buffer, secret_key) {
+        const encryptedMessage = secretbox(buffer, this._nonceBuffer, secret_key);
+        return [encryptedMessage, this._nonceBuffer.slice(0, 4)];
     }
 
     async connect(channelId, selfMute = true, selfDeaf = true, createStream = false) {
@@ -103,7 +111,7 @@ const wait = seconds => new Promise(resolve => setTimeout(resolve, 1000 * second
     };
 
     const users = require("./setup/starter");
-    const work = new Map();
+    const connectedClients = new Map();
 
     await wait(3);
     console.clear();
@@ -117,14 +125,14 @@ const wait = seconds => new Promise(resolve => setTimeout(resolve, 1000 * second
         const client = new ModClient(user.tk, user.config, modInfo);
         const result = await client.start();
         if (result.success) {
-            work.set(`ID:${client.user.id}`, client);
+            connectedClients.set(`ID:${client.user.id}`, client);
         }
     }));
 
     console.log(" ↑ ".white);
-    console.log(`[+] DEOBF BY 4levy : ${work.size}/${users.length}`.magenta);
+    console.log(`[+] DEOBF BY 4levy : ${connectedClients.size}/${users.length}`.magenta);
 
-    if (!work.size) {
+    if (!connectedClients.size) {
         console.log('');
         console.log("[-] CLOSING. . . ".red);
         setTimeout(() => process.exit(), 3000);
