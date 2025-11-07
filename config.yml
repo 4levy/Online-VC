@@ -1,0 +1,12 @@
+INPUTS:
+  - token: "value"
+    channelId: "1418573357863014423"
+    selfMute: true
+    selfDeaf: true
+    stream: true
+
+  - token: "value 2"
+    channelId: "123456789012345678"
+    selfMute: false
+    selfDeaf: false
+    stream: false

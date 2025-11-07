@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "colors": "^1.4.0",
+    "debug": "^4.4.3",
+    "discord.js-selfbot-v13": "^3.5.1",
+    "js-yaml": "^4.1.0",
+    "tweetnacl": "^1.0.3"
+  }
+}
